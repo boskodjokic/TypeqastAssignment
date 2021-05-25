@@ -2,21 +2,15 @@ package com.bosko.typeqastassignment.mapper;
 
 import com.bosko.typeqastassignment.dto.ReadingDTO;
 import com.bosko.typeqastassignment.entity.Reading;
-import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
-@Component
-public class ReadingMapper {
+@Mapper
+public interface ReadingMapper {
 
-    public ReadingDTO transformToDTO(Reading reading) {
-        ReadingDTO readingDTO = new ReadingDTO();
-        BeanUtils.copyProperties(reading, readingDTO);
-        return readingDTO;
-    }
+    ReadingMapper INSTANCE = Mappers.getMapper(ReadingMapper.class);
 
-    public Reading transformToEntity(ReadingDTO readingDTO) {
-        Reading reading = new Reading();
-        BeanUtils.copyProperties(readingDTO, reading);
-        return  reading;
-    }
+    ReadingDTO transformToDTO(Reading reading);
+
+    Reading transformToEntity(ReadingDTO readingDTO);
 }

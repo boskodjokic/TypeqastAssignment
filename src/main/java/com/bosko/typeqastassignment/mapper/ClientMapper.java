@@ -2,21 +2,15 @@ package com.bosko.typeqastassignment.mapper;
 
 import com.bosko.typeqastassignment.dto.ClientDTO;
 import com.bosko.typeqastassignment.entity.Client;
-import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
-@Component
-public class ClientMapper {
+@Mapper
+public interface ClientMapper {
 
-    public ClientDTO transformToDTO(Client client) {
-        ClientDTO clientDTO = new ClientDTO();
-        BeanUtils.copyProperties(client, clientDTO);
-        return clientDTO;
-    }
+    ClientMapper INSTANCE = Mappers.getMapper(ClientMapper.class);
 
-    public Client transformToEntity(ClientDTO clientDTO) {
-        Client client = new Client();
-        BeanUtils.copyProperties(clientDTO, client);
-        return client;
-    }
+    ClientDTO transformToDTO(Client client);
+
+    Client transformToEntity(ClientDTO clientDTO);
 }

@@ -2,21 +2,15 @@ package com.bosko.typeqastassignment.mapper;
 
 import com.bosko.typeqastassignment.dto.AddressDTO;
 import com.bosko.typeqastassignment.entity.Address;
-import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
-@Component
-public class AddressMapper {
+@Mapper
+public interface AddressMapper {
 
-    public AddressDTO transformToDTO(Address address) {
-        AddressDTO addressDTO = new AddressDTO();
-        BeanUtils.copyProperties(address, addressDTO);
-        return addressDTO;
-    }
+    AddressMapper INSTANCE = Mappers.getMapper(AddressMapper.class);
 
-    public Address transformToEntity(AddressDTO addressDTO) {
-        Address address = new Address();
-        BeanUtils.copyProperties(addressDTO, address);
-        return address;
-    }
+    AddressDTO transformToDTO(Address address);
+
+    Address transformToEntity(AddressDTO addressDTO);
 }
