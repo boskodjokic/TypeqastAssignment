@@ -1,7 +1,6 @@
 package com.bosko.typeqastassignment.service;
 
 import com.bosko.typeqastassignment.dto.ClientDTO;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +10,9 @@ public interface ClientService {
 
     List<ClientDTO> getAllClients();
 
-    ClientDTO getClientById(Long id) throws ChangeSetPersister.NotFoundException;
+    ClientDTO getClientById(Long id);
 
-    ClientDTO createNewClient(ClientDTO clientDTO);
+    ClientDTO createNewClient(ClientDTO clientDTO) throws Exception;
 
     ClientDTO saveClientByDTO(Long id, ClientDTO clientDTO);
 

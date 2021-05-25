@@ -25,9 +25,33 @@ public class ClientController {
         return new ClientListDTO(clientService.getAllClients());
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ClientDTO getClientById(@PathVariable Long id) throws ChangeSetPersister.NotFoundException {
         return clientService.getClientById(id);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.OK)
+    public ClientDTO createNewClient(@RequestBody ClientDTO clientDTO) throws Exception {
+        return clientService.createNewClient(clientDTO);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ClientDTO updateClient(@PathVariable Long id, @RequestBody ClientDTO clientDTO) {
+        return clientService.saveClientByDTO(id, clientDTO);
+    }
+
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ClientDTO patchClient(@PathVariable Long id, @RequestBody ClientDTO clientDTO) {
+        return clientService.patchClient(id, clientDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteClient(@PathVariable Long id) {
+        clientService.deleteClientById(id);
     }
 }
