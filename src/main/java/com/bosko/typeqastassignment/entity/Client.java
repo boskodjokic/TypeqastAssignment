@@ -23,14 +23,4 @@ public class Client {
     @JoinColumn(name = "meter_id", referencedColumnName = "id")
     private Meter meter;
 
-
-    public Client() {
-    }
-
-    public Client(String firstName, String lastName, Address address, Meter meter) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.address = address;
-        this.meter = meter;
-    }
 }

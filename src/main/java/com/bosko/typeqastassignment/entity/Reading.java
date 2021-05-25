@@ -1,5 +1,6 @@
 package com.bosko.typeqastassignment.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ public class Reading {
     private int value;
     private LocalDate createDate;
 
+    @JsonBackReference
     @ManyToOne
     private Meter meter;
 }

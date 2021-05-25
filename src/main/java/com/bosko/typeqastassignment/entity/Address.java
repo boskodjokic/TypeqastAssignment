@@ -1,5 +1,6 @@
 package com.bosko.typeqastassignment.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,12 +20,8 @@ public class Address {
     private String number;
     private String city;
 
+    @JsonBackReference
     @OneToOne(mappedBy = "address")
     private Client client;
 
-    public Address(String street, String number, String city) {
-        this.street = street;
-        this.number = number;
-        this.city = city;
-    }
 }
