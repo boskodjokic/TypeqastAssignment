@@ -20,7 +20,6 @@ public class Address {
     private String city;
 
     @OneToOne(mappedBy = "address")
-    @JoinColumn(name = "client_id", referencedColumnName = "id")
     private Client client;
 
     public Address(String street, String number, String city) {

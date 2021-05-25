@@ -14,7 +14,6 @@ public class Meter {
     private Long id;
 
     @OneToOne(mappedBy = "meter")
-    @JoinColumn(name = "client_id", referencedColumnName = "id")
     private Client client;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "meter")

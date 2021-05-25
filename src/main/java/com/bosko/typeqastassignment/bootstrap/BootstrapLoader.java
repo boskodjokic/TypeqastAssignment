@@ -32,7 +32,8 @@ public class BootstrapLoader implements CommandLineRunner {
         client1.setLastName("Djokic");
         Address address = new Address();
         address.setCity("Beograd");
-        address.setId(1L);
+        address.setNumber("74z");
+        address.setStreet("Dragoslava Srejovica");
         addressRepository.save(address);
         client1.setAddress(address);
         client1.setMeter(new Meter());
