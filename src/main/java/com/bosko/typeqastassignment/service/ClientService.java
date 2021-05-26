@@ -1,11 +1,9 @@
 package com.bosko.typeqastassignment.service;
 
 import com.bosko.typeqastassignment.dto.ClientDTO;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public interface ClientService {
 
     List<ClientDTO> getAllClients();
@@ -14,9 +12,11 @@ public interface ClientService {
 
     ClientDTO createNewClient(ClientDTO clientDTO) throws Exception;
 
-    ClientDTO saveClientByDTO(Long id, ClientDTO clientDTO);
-
-    ClientDTO patchClient(Long id, ClientDTO clientDTO);
+    ClientDTO updateClient(Long id, ClientDTO clientDTO);
 
     void deleteClientById(Long id);
+
+    List<ClientDTO> findByLastName(String lastName);
+
+    ClientDTO findByFirstNameAndLastName(String firstName, String lastName);
 }

@@ -3,78 +3,82 @@ package com.bosko.typeqastassignment.service;
 import com.bosko.typeqastassignment.dto.ClientDTO;
 import com.bosko.typeqastassignment.entity.Address;
 import com.bosko.typeqastassignment.entity.Client;
-import com.bosko.typeqastassignment.mapper.ClientMapper;
+import com.bosko.typeqastassignment.entity.Meter;
+import com.bosko.typeqastassignment.mapper.MapStructMapper;
 import com.bosko.typeqastassignment.repository.AddressRepository;
 import com.bosko.typeqastassignment.repository.ClientRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class ClientServiceImpl implements ClientService {
 
-    private final ClientMapper clientMapper;
-    private final ClientRepository clientRepository;
-    private final AddressRepository addressRepository;
+    @Autowired
+    private MapStructMapper mapStructMapper;
 
-    public ClientServiceImpl(ClientMapper clientMapper, ClientRepository clientRepository, AddressRepository addressRepository) {
-        this.clientMapper = clientMapper;
-        this.clientRepository = clientRepository;
-        this.addressRepository = addressRepository;
-    }
+    @Autowired
+    private ClientRepository clientRepository;
+
+    @Autowired
+    private AddressRepository addressRepository;
+
 
     @Override
     public List<ClientDTO> getAllClients() {
 
         return clientRepository.findAll()
                 .stream()
-                .map(clientMapper::transformToDTO)
+                .map(mapStructMapper::transformClientToDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
     public ClientDTO getClientById(Long id) {
         return clientRepository.findById(id)
-                .map(clientMapper::transformToDTO)
+                .map(mapStructMapper::transformClientToDTO)
                 .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
-    public ClientDTO createNewClient(ClientDTO clientDTO) throws Exception {
+    public ClientDTO createNewClient(ClientDTO clientDTO) {
+        addressNotNullCheck(clientDTO);
         List<Address> addresses = addressRepository.findAll();
         for (Address address : addresses) {
-            if (address.equals(addresses)) {
-//                todo
+            if (clientDTO.getAddress().equals(address)) {
+                throw new ResourceNotFoundException();
             }
         }
-        return saveAndReturnDTO(clientMapper.transformToEntity(clientDTO));
+        clientDTO.setMeter(new Meter());
+        return saveAndReturnDTO(mapStructMapper.transformClientDTOToEntity(clientDTO));
     }
 
     public ClientDTO saveAndReturnDTO(Client client) {
         Client savedClient = clientRepository.save(client);
 
-        return clientMapper.transformToDTO(savedClient);
+        return mapStructMapper.transformClientToDTO(savedClient);
 
     }
 
-    @Override
-    public ClientDTO saveClientByDTO(Long id, ClientDTO clientDTO) {
-        Client client = clientMapper.transformToEntity(clientDTO);
-        client.setId(id);
-        return saveAndReturnDTO(client);
+    public void addressNotNullCheck(ClientDTO clientDTO) {
+        if (clientDTO.getAddress().getCity() == null || clientDTO.getAddress().getStreet() == null || clientDTO.getAddress().getNumber() == null) {
+            throw new ResourceNotFoundException();
+        }
     }
 
     @Override
-    public ClientDTO patchClient(Long id, ClientDTO clientDTO) {
+    public ClientDTO updateClient(Long id, ClientDTO clientDTO) {
         return clientRepository.findById(id).map(client -> {
                     if (clientDTO.getFirstName() != null) {
                         client.setFirstName(clientDTO.getFirstName());
                     }
-                    if(clientDTO.getLastName() != null) {
+                    if (clientDTO.getLastName() != null) {
                         client.setLastName(clientDTO.getLastName());
                     }
-            return clientMapper.transformToDTO(clientRepository.save(client));
+                    return mapStructMapper.transformClientToDTO(clientRepository.save(client));
                 }
         ).orElseThrow(ResourceNotFoundException::new);
     }
@@ -84,5 +88,26 @@ public class ClientServiceImpl implements ClientService {
 
         clientRepository.deleteById(id);
 
+    }
+
+    @Override
+    public List<ClientDTO> findByLastName(String lastName) {
+        return clientRepository.findByLastName(lastName)
+                .stream()
+                .map(mapStructMapper::transformClientToDTO)
+                .collect(Collectors.toList());
+
+    }
+
+    @Override
+    public ClientDTO findByFirstNameAndLastName(String firstName, String lastName) {
+
+        Optional<Client>client =clientRepository.findByFirstNameAndLastName(firstName, lastName);
+
+        if(!client.isPresent()) {
+            throw new ResourceNotFoundException();
+        }
+
+        return mapStructMapper.transformClientToDTO(client.get());
     }
 }
