@@ -1,6 +1,5 @@
 package com.bosko.typeqastassignment.dto;
 
-import com.bosko.typeqastassignment.entity.Client;
 import lombok.Data;
 
 @Data
@@ -10,5 +9,4 @@ public class AddressDTO {
     private String street;
     private String number;
     private String city;
-    private Client client;
 }

@@ -1,5 +1,6 @@
 package com.bosko.typeqastassignment.dto;
 
+import com.bosko.typeqastassignment.entity.Address;
 import com.bosko.typeqastassignment.entity.Meter;
 import lombok.Data;
 
@@ -12,4 +13,7 @@ public class ReadingDTO {
     private int value;
     private LocalDate createDate;
     private Meter meter;
+    private String firstName;
+    private String lastName;
+    private Address address;
 }

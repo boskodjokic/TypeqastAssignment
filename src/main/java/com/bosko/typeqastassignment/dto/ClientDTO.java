@@ -12,4 +12,5 @@ public class ClientDTO {
     private String lastName;
     private Address address;
     private Meter meter;
+
 }
