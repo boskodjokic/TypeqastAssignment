@@ -1,4 +1,4 @@
-package com.bosko.typeqastassignment.service;
+package com.bosko.typeqastassignment.exceptions;
 
 public class ResourceNotFoundException extends RuntimeException{
 

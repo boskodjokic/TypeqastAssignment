@@ -1,6 +1,7 @@
 package com.bosko.typeqastassignment.controller;
 
-import com.bosko.typeqastassignment.service.ResourceNotFoundException;
+import com.bosko.typeqastassignment.exceptions.BadRequestException;
+import com.bosko.typeqastassignment.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,11 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     @ExceptionHandler({ResourceNotFoundException.class})
     public ResponseEntity<Object> handleNotFoundException(Exception exception, WebRequest request) {
-        return new ResponseEntity<Object>("Resource not found", new HttpHeaders(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<Object>("Resource with specified parameters is not found", new HttpHeaders(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler({BadRequestException.class})
+    public ResponseEntity<Object> handleBadrEQUESTException(Exception exception, WebRequest request) {
+        return new ResponseEntity<Object>("Resource with same parameters already exists", new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 }
