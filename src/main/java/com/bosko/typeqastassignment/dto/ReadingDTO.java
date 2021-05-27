@@ -1,19 +1,24 @@
 package com.bosko.typeqastassignment.dto;
 
-import com.bosko.typeqastassignment.entity.Address;
 import com.bosko.typeqastassignment.entity.Meter;
-import lombok.Data;
-
-import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.*;
 
 @Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ReadingDTO {
 
+    @JsonBackReference(value = "readingId")
     private Long id;
+
     private int value;
-    private LocalDate createDate;
+    private String month;
+    private String year;
+
+    @JsonBackReference(value = "meter")
     private Meter meter;
-    private String firstName;
-    private String lastName;
-    private Address address;
+
 }
