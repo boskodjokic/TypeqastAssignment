@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,12 +23,6 @@ public class BootstrapLoader implements CommandLineRunner {
     private AddressRepository addressRepository;
     @Autowired
     private MeterRepository meterRepository;
-
-
-//    public BootstrapLoader(ClientRepository clientRepository, AddressRepository addressRepository) {
-//        this.clientRepository = clientRepository;
-//        this.addressRepository = addressRepository;
-//    }
 
     @Override
     public void run(String... args) throws Exception {
@@ -49,8 +42,9 @@ public class BootstrapLoader implements CommandLineRunner {
         client1.setAddress(address);
         Meter meter = new Meter();
         List<Reading> readings = new ArrayList<>();
-        readings.add(new Reading(12, LocalDate.of(2021, 12, 10), meter));
-        readings.add(new Reading(35, LocalDate.of(2021, 11, 15), meter));
+        readings.add(new Reading(12, "February", 2021, meter));
+        readings.add(new Reading(35, "March", 2021, meter));
+        readings.add(new Reading(15, "March", 2020, meter));
         meter.setReadings(readings);
         meterRepository.save(meter);
         client1.setMeter(meter);
@@ -70,8 +64,8 @@ public class BootstrapLoader implements CommandLineRunner {
         client2.setAddress(address2);
         Meter meter2 = new Meter();
         List<Reading> readings2 = new ArrayList<>();
-        readings2.add(new Reading(12, LocalDate.of(2021, 10, 1), meter2));
-        readings2.add(new Reading(25, LocalDate.of(2021, 7, 12), meter2));
+        readings2.add(new Reading(12, "May", 2021, meter2));
+        readings2.add(new Reading(25, "June", 2021, meter2));
         meter2.setReadings(readings2);
         meterRepository.save(meter2);
         client2.setMeter(meter2);
