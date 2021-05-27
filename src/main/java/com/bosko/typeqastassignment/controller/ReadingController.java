@@ -1,6 +1,6 @@
 package com.bosko.typeqastassignment.controller;
 
-import com.bosko.typeqastassignment.dto.UserReadingDTO;
+import com.bosko.typeqastassignment.dto.ReadingDTO;
 import com.bosko.typeqastassignment.mapper.MapStructMapper;
 import com.bosko.typeqastassignment.service.ReadingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +21,45 @@ public class ReadingController {
     @Autowired
     private MapStructMapper mapStructMapper;
 
-    @GetMapping("{id}")
+    @GetMapping("{clientId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<UserReadingDTO> getReadingsByClientId(@PathVariable Long id) {
-        return readingService.getAllReadingsForClientId(id);
+    public List<ReadingDTO> getReadingsByClientId(@PathVariable Long clientId) {
+        return readingService.getAllReadingsForClientId(clientId);
     }
 
-    @GetMapping("total/{id}")
+    @GetMapping("/total/{clientId}/{year}")
     @ResponseStatus(HttpStatus.OK)
-    public UserReadingDTO getTotalReadingsByClientId(@PathVariable Long id) {
-        return readingService.getTotalOfReadingsForClientId(id);
+    public ReadingDTO getTotalReadingsByClientId(@PathVariable Long clientId, @PathVariable int year) {
+        return readingService.getTotalOfReadingsForClientId(clientId, year);
+    }
+
+    @GetMapping("{clientId}/{year}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ReadingDTO> getTotalReadingsByClientIdPerYear(@PathVariable Long clientId, @PathVariable int year) {
+        return readingService.getAllReadingsPerClientPerYear(clientId, year);
+    }
+
+    @GetMapping("{clientId}/{month}/{year}")
+    @ResponseStatus(HttpStatus.OK)
+    public ReadingDTO getReadingForClientIdForYearAndMonth(@PathVariable Long clientId, @PathVariable String month, @PathVariable int year) {
+        return readingService.getReadingForClientIdForMonth(clientId, month, year);
+    }
+
+    @PostMapping("{clientId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ReadingDTO createNewReading(@PathVariable Long clientId, @RequestBody ReadingDTO readingDTO) {
+        return readingService.createNewReading(clientId, readingDTO);
+    }
+
+    @PutMapping("{clientId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ReadingDTO updateReading(@PathVariable Long clientId, @RequestBody ReadingDTO readingDTO) {
+        return readingService.updateReading(clientId, readingDTO);
+    }
+
+    @DeleteMapping("{clientId}/{month}/{year}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteReading(@PathVariable Long clientId, @PathVariable String month, @PathVariable int year) {
+        readingService.deleteReading(clientId, month, year);
     }
 }
