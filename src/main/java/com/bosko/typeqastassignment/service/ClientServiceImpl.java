@@ -4,6 +4,8 @@ import com.bosko.typeqastassignment.dto.ClientDTO;
 import com.bosko.typeqastassignment.entity.Address;
 import com.bosko.typeqastassignment.entity.Client;
 import com.bosko.typeqastassignment.entity.Meter;
+import com.bosko.typeqastassignment.exceptions.BadRequestException;
+import com.bosko.typeqastassignment.exceptions.ResourceNotFoundException;
 import com.bosko.typeqastassignment.mapper.MapStructMapper;
 import com.bosko.typeqastassignment.repository.AddressRepository;
 import com.bosko.typeqastassignment.repository.ClientRepository;
@@ -49,7 +51,7 @@ public class ClientServiceImpl implements ClientService {
         List<Address> addresses = addressRepository.findAll();
         for (Address address : addresses) {
             if (clientDTO.getAddress().equals(address)) {
-                throw new ResourceNotFoundException();
+                throw new BadRequestException();
             }
         }
         clientDTO.setMeter(new Meter());
