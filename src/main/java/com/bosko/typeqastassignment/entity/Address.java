@@ -25,7 +25,7 @@ public class Address {
     @Column(nullable = false, length = 100)
     private String city;
 
-    @JsonBackReference
+    @JsonBackReference(value = "client")
     @OneToOne(mappedBy = "address")
     private Client client;
 

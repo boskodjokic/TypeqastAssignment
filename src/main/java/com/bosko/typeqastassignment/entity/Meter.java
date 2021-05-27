@@ -15,10 +15,13 @@ public class Meter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonBackReference
+    @JsonBackReference(value = "clientId")
     @OneToOne(mappedBy = "meter")
     private Client client;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "meter", orphanRemoval = true)
+    @JsonBackReference(value = "readings")
+    @OneToMany(cascade =
+            {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REMOVE, CascadeType.REFRESH},
+            mappedBy = "meter", fetch = FetchType.EAGER)
     private List<Reading> readings = new ArrayList<>();
 }

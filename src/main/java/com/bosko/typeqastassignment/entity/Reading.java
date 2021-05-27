@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -18,15 +17,17 @@ public class Reading {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private int value;
-    private LocalDate createDate;
+    private String month;
+    private int year;
 
-    @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference(value = "meterId")
+    @ManyToOne
     private Meter meter;
 
-    public Reading(int value, LocalDate createDate, Meter meter) {
+    public Reading(int value, String month, int year, Meter meter) {
         this.value = value;
-        this.createDate = createDate;
+        this.month = month;
+        this.year = year;
         this.meter = meter;
     }
 }
