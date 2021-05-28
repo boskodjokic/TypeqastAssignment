@@ -1,23 +1,30 @@
 package com.bosko.typeqastassignment.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/**
+ * Reading class which is a table in our database.
+ * Lombok annotation @Data was used to reduce code for getters, setters and constructors.
+ */
+
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 public class Reading {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, length = 4)
     private int value;
+
+    @Column(nullable = false, length = 100)
     private String month;
+
+    @Column(nullable = false, length = 4)
     private int year;
 
     @JsonBackReference(value = "meterId")
