@@ -5,11 +5,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-/**
- * Client class which is a table in our database.
- * Lombok annotation @Data was used to reduce code for getters, setters and constructors.
- */
-
 @Data
 @Entity
 public class Client {

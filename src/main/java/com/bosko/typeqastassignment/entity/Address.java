@@ -6,11 +6,6 @@ import lombok.Data;
 import javax.persistence.*;
 import java.util.Objects;
 
-/**
- * Address class which is a table in our database.
- * Lombok annotation @Data was used to reduce code for getters, setters and constructors.
- * equals and hashCode methods were overridden because we needed to check equality of address object in one of the methods.
- */
 @Data
 @Entity
 public class Address {

@@ -7,11 +7,6 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Meter class which is a table in our database.
- * Lombok annotation @Data was used to reduce code for getters, setters and constructors.
- */
-
 @Data
 @Entity
 public class Meter {
