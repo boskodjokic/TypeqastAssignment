@@ -6,6 +6,11 @@ import com.bosko.typeqastassignment.entity.Client;
 import com.bosko.typeqastassignment.entity.Reading;
 import org.springframework.stereotype.Component;
 
+/**
+ * First, I tried using MapStruct Mapper, but had problems with it.
+ * Sometimes it generated mapper class correct, other times all mappings were null(or empty).
+ * That is why I added custom mapper class to handle all the mappings back and forth.
+ */
 @Component
 public class Mapper {
 
