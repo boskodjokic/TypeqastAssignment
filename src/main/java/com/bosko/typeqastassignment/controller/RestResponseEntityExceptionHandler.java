@@ -10,16 +10,30 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+/**
+ * This class is for handling different exceptions when retrieving the data.
+ */
+
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
+
+    /**
+     * Handling not found exception when retrieving the data
+     * @return response in Postman
+     */
 
     @ExceptionHandler({ResourceNotFoundException.class})
     public ResponseEntity<Object> handleNotFoundException(Exception exception, WebRequest request) {
         return new ResponseEntity<Object>("Resource with specified parameters is not found", new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * Handling bad request exception when retrieving the data
+     * @return response in Postman
+     */
+
     @ExceptionHandler({BadRequestException.class})
-    public ResponseEntity<Object> handleBadrEQUESTException(Exception exception, WebRequest request) {
+    public ResponseEntity<Object> handleBadRequestException(Exception exception, WebRequest request) {
         return new ResponseEntity<Object>("Resource with same parameters already exists", new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 }
