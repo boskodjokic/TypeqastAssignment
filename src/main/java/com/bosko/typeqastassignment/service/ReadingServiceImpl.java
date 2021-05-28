@@ -27,12 +27,25 @@ public class ReadingServiceImpl implements ReadingService {
     @Autowired
     private ClientRepository clientRepository;
 
+
+    /**
+     * Method for getting all readings for a specified client id
+     * First, we check is the client present in the database. If not, error is shown to user.
+     * @param clientId is passed for checking
+     * @return list of readings is returned from the database to user.
+     */
     @Override
     public List<ReadingDTO> getAllReadingsForClientId(Long clientId) {
         checkIfClientExists(clientId);
         return readingRepository.getAllReadingsForClientId(clientId).stream().map(mapper::transformToReadingDTO).collect(Collectors.toList());
     }
 
+    /**
+     *Method for retrieving total value of readings for client per specified year.
+     * @param clientId is passed for checking is the client present in the database, if not, error is shown to user.
+     * @param year is also passed as a parameter for which we calculate total value of readings.
+     * @return ReadingDTO is returned to user.
+     */
     @Override
     public ReadingDTO getTotalOfReadingsForClientId(Long clientId, int year) {
         checkIfClientExists(clientId);
@@ -52,6 +65,13 @@ public class ReadingServiceImpl implements ReadingService {
         return totalReadings;
     }
 
+    /**
+     * Method for getting a list of readings for a client id for whole year.
+     * We are checking all the readings for a clientId and checking is it for a specified year. If yes, we are adding those readings to the list.
+     * @param clientId is passed for checking is the client present in the database, if not, error is shown to user.
+     * @param year is also passed as a parameter for which we retrieve the readings from a database.
+     * @return ReadingDTO list is returned to user.
+     */
     @Override
     public List<ReadingDTO> getAllReadingsPerClientPerYear(Long clientId, int year) {
         checkIfClientExists(clientId);
@@ -67,6 +87,16 @@ public class ReadingServiceImpl implements ReadingService {
         return readingsPerYear;
     }
 
+    /**
+     * Method for getting a reading for a specified clientId, month and year.
+     * We are checking is there a reading for a specified user in the database for month and year provided.
+     * If yes, we are taking that reading to show it to the user together with month and year.
+     * If they are not, error is shown to the user that specified resource is not available.
+     * @param clientId is passed for checking is the client present in the database, if not, error is shown to user.
+     * @param month is passed as a parameter for checking is the month in the database.
+     * @param year is passed as a parameter for checking is the year in the database.
+     * @return ReadingDTO object is returned to the user.
+     */
     @Override
     public ReadingDTO getReadingForClientIdForMonth(Long clientId, String month, int year) {
         checkIfClientExists(clientId);
@@ -84,6 +114,18 @@ public class ReadingServiceImpl implements ReadingService {
         }
     }
 
+    /**
+     * Method for creating a new reading.
+     * @param clientId client id is passed for checking is the client already in a database, if not, error is shown to the user.
+     * @param readingDTO is passed through postman in a format below:
+     *    {
+     *         "value": number,
+     *         "month": "month",
+     *         "year": "year"
+     *     }
+     * First, we are checking is there already that month/year combination in the database. If yes, error is shown to the user and entry is not saved.
+     * @return ReadingDTO with inserted values is shown back to the user if everything is OK.
+     */
     @Override
     public ReadingDTO createNewReading(Long clientId, ReadingDTO readingDTO) {
         checkIfClientExists(clientId);
@@ -103,6 +145,20 @@ public class ReadingServiceImpl implements ReadingService {
 
     }
 
+    /**
+     * Method for updating a reading.
+     * @param clientId is passed for checking is the client already in a database, if not, error is shown to the user.
+     * @param readingDTO is passed through postman in a format below:
+     *           {
+     *                "value": number,
+     *                "month": "month",
+     *                "year": "year"
+     *            }
+     * First we are checking is there reading with specified year/month.
+     * Only if they are present, value can be updated.
+     * If the year and month provided are not in the database, error is show to the user.
+     * @return ReadingDTO with inserted values is shown back to the user if everything is OK.
+     */
     @Override
     public ReadingDTO updateReading(Long clientId, ReadingDTO readingDTO) {
 
@@ -130,12 +186,19 @@ public class ReadingServiceImpl implements ReadingService {
 
     }
 
+    /**
+     * Method for deleting a reading from a database.
+     * @param clientId is passed for checking is the client already in a database, if not, error is shown to the user.
+     * @param month for which we are checking is in the database.
+     * @param year for which we are checking is in the database.
+     * We are checking is the reading id in the database for specified parameters. if not, error is shown to the user.
+     * If everything is OK, reading is deleted from a database.
+     */
     @Override
     public void deleteReading(Long clientId, String month, int year) {
         checkIfClientExists(clientId);
         Long meterId = readingRepository.getMeterId(clientId);
         Long readingId = readingRepository.getReadingId(year, month, meterId);
-        System.out.println(readingId);
         if (readingId == null) {
             throw new ResourceNotFoundException();
 
@@ -143,6 +206,10 @@ public class ReadingServiceImpl implements ReadingService {
         readingRepository.deleteById(readingId);
     }
 
+    /**
+     * Method for checking is the user in the database.
+     * @param clientId is passed for checking is the client already in a database, if not, error is shown to the user.
+     */
     public void checkIfClientExists(Long clientId) {
         if (!clientRepository.findById(clientId).isPresent()) {
             throw new ResourceNotFoundException();
