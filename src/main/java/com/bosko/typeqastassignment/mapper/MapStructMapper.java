@@ -1,9 +1,8 @@
 package com.bosko.typeqastassignment.mapper;
 
-import com.bosko.typeqastassignment.dto.*;
-import com.bosko.typeqastassignment.entity.Address;
+import com.bosko.typeqastassignment.dto.ClientDTO;
+import com.bosko.typeqastassignment.dto.ReadingDTO;
 import com.bosko.typeqastassignment.entity.Client;
-import com.bosko.typeqastassignment.entity.Meter;
 import com.bosko.typeqastassignment.entity.Reading;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -17,16 +16,9 @@ public interface MapStructMapper {
 
     Client transformClientDTOToEntity(ClientDTO clientDTO);
 
-    MeterDTO transformMeterToDTO(Meter meter);
-
-    Meter transformMeterDTOToEntity(MeterDTO meterDTO);
-
     ReadingDTO transformToReadingDTO(Reading reading);
 
     Reading transformReadingDTOToEntity(ReadingDTO readingDTO);
 
-    AddressDTO transformAddressToDTO(Address address);
-
-    Address transformAddressDTOToEntity(AddressDTO addressDTO);
 
 }
