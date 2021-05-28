@@ -1,4 +1,4 @@
-package com.bosko.typeqastassignment.dto;
+package com.bosko.typeqastassignment.api.v1.dto;
 
 import com.bosko.typeqastassignment.entity.Address;
 import com.bosko.typeqastassignment.entity.Meter;

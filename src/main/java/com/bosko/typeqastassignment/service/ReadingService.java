@@ -1,6 +1,6 @@
 package com.bosko.typeqastassignment.service;
 
-import com.bosko.typeqastassignment.dto.ReadingDTO;
+import com.bosko.typeqastassignment.api.v1.dto.ReadingDTO;
 
 import java.util.List;
 

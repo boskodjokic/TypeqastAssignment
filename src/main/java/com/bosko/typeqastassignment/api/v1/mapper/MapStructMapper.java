@@ -1,7 +1,7 @@
-package com.bosko.typeqastassignment.mapper;
+package com.bosko.typeqastassignment.api.v1.mapper;
 
-import com.bosko.typeqastassignment.dto.ClientDTO;
-import com.bosko.typeqastassignment.dto.ReadingDTO;
+import com.bosko.typeqastassignment.api.v1.dto.ClientDTO;
+import com.bosko.typeqastassignment.api.v1.dto.ReadingDTO;
 import com.bosko.typeqastassignment.entity.Client;
 import com.bosko.typeqastassignment.entity.Reading;
 import org.mapstruct.Mapper;

@@ -1,6 +1,6 @@
 package com.bosko.typeqastassignment.service;
 
-import com.bosko.typeqastassignment.dto.ClientDTO;
+import com.bosko.typeqastassignment.api.v1.dto.ClientDTO;
 
 import java.util.List;
 
@@ -18,5 +18,5 @@ public interface ClientService {
 
     List<ClientDTO> findByLastName(String lastName);
 
-    ClientDTO findByFirstNameAndLastName(String firstName, String lastName);
+    List<ClientDTO> findByFirstNameAndLastName(String firstName, String lastName);
 }

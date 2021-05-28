@@ -1,11 +1,11 @@
 package com.bosko.typeqastassignment.service;
 
-import com.bosko.typeqastassignment.dto.ReadingDTO;
+import com.bosko.typeqastassignment.api.v1.dto.ReadingDTO;
 import com.bosko.typeqastassignment.entity.Meter;
 import com.bosko.typeqastassignment.entity.Reading;
 import com.bosko.typeqastassignment.exceptions.BadRequestException;
 import com.bosko.typeqastassignment.exceptions.ResourceNotFoundException;
-import com.bosko.typeqastassignment.mapper.MapStructMapper;
+import com.bosko.typeqastassignment.api.v1.mapper.Mapper;
 import com.bosko.typeqastassignment.repository.ClientRepository;
 import com.bosko.typeqastassignment.repository.ReadingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class ReadingServiceImpl implements ReadingService {
 
     @Autowired
-    private MapStructMapper mapStructMapper;
+    private Mapper mapper;
 
     @Autowired
     private ReadingRepository readingRepository;
@@ -30,7 +30,7 @@ public class ReadingServiceImpl implements ReadingService {
     @Override
     public List<ReadingDTO> getAllReadingsForClientId(Long clientId) {
         checkIfClientExists(clientId);
-        return readingRepository.getAllReadingsForClientId(clientId).stream().map(mapStructMapper::transformToReadingDTO).collect(Collectors.toList());
+        return readingRepository.getAllReadingsForClientId(clientId).stream().map(mapper::transformToReadingDTO).collect(Collectors.toList());
     }
 
     @Override
@@ -59,11 +59,8 @@ public class ReadingServiceImpl implements ReadingService {
         List<ReadingDTO> readingsPerYear = new ArrayList<>();
         for (ReadingDTO reading : readings) {
             if (reading.getYear().equals(String.valueOf(year))) {
-                ReadingDTO totalReadings = new ReadingDTO();
-                totalReadings.setValue(reading.getValue());
-                totalReadings.setMonth(reading.getMonth());
-                totalReadings.setYear(String.valueOf(year));
-                totalReadings.setMeter(reading.getMeter());
+                ReadingDTO totalReadings;
+                totalReadings = reading;
                 readingsPerYear.add(totalReadings);
             }
         }
@@ -77,14 +74,14 @@ public class ReadingServiceImpl implements ReadingService {
         ReadingDTO monthReading = new ReadingDTO();
         for (ReadingDTO reading : readings) {
             if (reading.getMonth().equals(month) && reading.getYear().equals(String.valueOf(year))) {
-
-                monthReading.setValue(reading.getValue());
-                monthReading.setMonth(reading.getMonth());
-                monthReading.setYear(reading.getYear());
-                monthReading.setMeter(reading.getMeter());
+                monthReading = reading;
             }
         }
-        return monthReading;
+        if (monthReading.getMonth() == null && monthReading.getYear() == null) {
+            throw new ResourceNotFoundException();
+        } else {
+            return monthReading;
+        }
     }
 
     @Override
@@ -98,13 +95,11 @@ public class ReadingServiceImpl implements ReadingService {
                 throw new BadRequestException();
             }
         }
-        Meter meter = getAllReadingsForClientId(clientId).get(clientId.intValue() - 1).getMeter();
-        readingDTO.setMeter(meter);
+        readingDTO.setMeter(clientRepository.getById(clientId).getMeter());
 
-        Reading reading = mapStructMapper.transformReadingDTOToEntity(readingDTO);
+        Reading reading = mapper.transformReadingDTOToEntity(readingDTO);
 
-
-        return mapStructMapper.transformToReadingDTO(readingRepository.save(reading));
+        return mapper.transformToReadingDTO(readingRepository.save(reading));
 
     }
 
@@ -112,7 +107,7 @@ public class ReadingServiceImpl implements ReadingService {
     public ReadingDTO updateReading(Long clientId, ReadingDTO readingDTO) {
 
         checkIfClientExists(clientId);
-        Meter meter = getAllReadingsForClientId(clientId).get(clientId.intValue() - 1).getMeter();
+        Meter meter = clientRepository.getById(clientId).getMeter();
         Long readingId = readingRepository.getReadingId(Integer.parseInt(readingDTO.getYear()), readingDTO.getMonth(), meter.getId());
         if (readingId == null) {
             throw new ResourceNotFoundException();
@@ -129,19 +124,21 @@ public class ReadingServiceImpl implements ReadingService {
         }
         readingDTO.setMeter(meter);
 
-        Reading reading = mapStructMapper.transformReadingDTOToEntity(readingDTO);
+        Reading reading = mapper.transformReadingDTOToEntity(readingDTO);
 
-        return mapStructMapper.transformToReadingDTO(readingRepository.save(reading));
+        return mapper.transformToReadingDTO(readingRepository.save(reading));
 
     }
 
     @Override
     public void deleteReading(Long clientId, String month, int year) {
         checkIfClientExists(clientId);
-        Long readingId = readingRepository.getReadingId(year, month, readingRepository.getMeterId(clientId));
+        Long meterId = readingRepository.getMeterId(clientId);
+        Long readingId = readingRepository.getReadingId(year, month, meterId);
         System.out.println(readingId);
         if (readingId == null) {
             throw new ResourceNotFoundException();
+
         }
         readingRepository.deleteById(readingId);
     }

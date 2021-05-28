@@ -1,6 +1,6 @@
-package com.bosko.typeqastassignment.controller;
+package com.bosko.typeqastassignment.controller.v1;
 
-import com.bosko.typeqastassignment.dto.ClientDTO;
+import com.bosko.typeqastassignment.api.v1.dto.ClientDTO;
 import com.bosko.typeqastassignment.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,7 +47,7 @@ public class ClientController {
         clientService.deleteClientById(clientId);
     }
 
-    @GetMapping("/{lastName}")
+    @GetMapping("get/{lastName}")
     @ResponseStatus(HttpStatus.OK)
     public List<ClientDTO> findByLastName(@PathVariable("lastName") String lastName) {
         return clientService.findByLastName(lastName);
@@ -55,7 +55,7 @@ public class ClientController {
 
     @GetMapping("/{firstName}/{lastName}")
     @ResponseStatus(HttpStatus.OK)
-    public ClientDTO findByFirstNameAndLastName(@PathVariable("firstName") String firstName, @PathVariable("lastName") String lastName) {
+    public List<ClientDTO> findByFirstNameAndLastName(@PathVariable("firstName") String firstName, @PathVariable("lastName") String lastName) {
         return clientService.findByFirstNameAndLastName(firstName, lastName);
     }
 }

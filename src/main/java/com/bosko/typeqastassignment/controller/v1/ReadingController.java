@@ -1,7 +1,6 @@
-package com.bosko.typeqastassignment.controller;
+package com.bosko.typeqastassignment.controller.v1;
 
-import com.bosko.typeqastassignment.dto.ReadingDTO;
-import com.bosko.typeqastassignment.mapper.MapStructMapper;
+import com.bosko.typeqastassignment.api.v1.dto.ReadingDTO;
 import com.bosko.typeqastassignment.service.ReadingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,9 +16,6 @@ public class ReadingController {
 
     @Autowired
     private ReadingService readingService;
-
-    @Autowired
-    private MapStructMapper mapStructMapper;
 
     @GetMapping("{clientId}")
     @ResponseStatus(HttpStatus.OK)

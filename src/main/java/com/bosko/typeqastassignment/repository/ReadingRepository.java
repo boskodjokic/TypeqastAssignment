@@ -1,5 +1,6 @@
 package com.bosko.typeqastassignment.repository;
 
+import com.bosko.typeqastassignment.entity.Meter;
 import com.bosko.typeqastassignment.entity.Reading;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -23,4 +24,8 @@ public interface ReadingRepository extends JpaRepository<Reading, Long> {
     @Query(value = "SELECT METER_ID FROM CLIENT WHERE \n" +
             "ID = :client_id", nativeQuery = true)
     Long getMeterId(@Param("client_id") Long id);
+
+    @Query(value = "SELECT METER_ID FROM CLIENT WHERE \n" +
+            "ID = :client_id", nativeQuery = true)
+    Meter getMeterId555(@Param("client_id") Long id);
 }

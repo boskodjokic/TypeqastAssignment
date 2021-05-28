@@ -19,7 +19,7 @@ public class Meter {
     @OneToOne(mappedBy = "meter")
     private Client client;
 
-    @JsonBackReference(value = "readings")
+//    @JsonBackReference(value = "readings")
     @OneToMany(cascade =
             {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REMOVE, CascadeType.REFRESH},
             mappedBy = "meter", fetch = FetchType.EAGER)
