@@ -138,8 +138,7 @@ public class ReadingServiceImpl implements ReadingService {
     @Override
     public void deleteReading(Long clientId, String month, int year) {
         checkIfClientExists(clientId);
-        Meter meter = getAllReadingsForClientId(clientId).get(clientId.intValue() - 1).getMeter();
-        Long readingId = readingRepository.getReadingId(year, month, meter.getId());
+        Long readingId = readingRepository.getReadingId(year, month, readingRepository.getMeterId(clientId));
         System.out.println(readingId);
         if (readingId == null) {
             throw new ResourceNotFoundException();

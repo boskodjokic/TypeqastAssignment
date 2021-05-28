@@ -19,4 +19,8 @@ public interface ReadingRepository extends JpaRepository<Reading, Long> {
     @Query(value = "SELECT ID FROM READING WHERE \n" +
             "YEAR = :year AND MONTH = :month AND METER_ID = :meter_id", nativeQuery = true)
     Long getReadingId(@Param("year") int year, @Param("month") String month, @Param("meter_id") Long id);
+
+    @Query(value = "SELECT METER_ID FROM CLIENT WHERE \n" +
+            "ID = :client_id", nativeQuery = true)
+    Long getMeterId(@Param("client_id") Long id);
 }
