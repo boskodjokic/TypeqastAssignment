@@ -23,10 +23,10 @@ public class ClientController {
         return clientService.getAllClients();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{clientId}")
     @ResponseStatus(HttpStatus.OK)
-    public ClientDTO getClientById(@PathVariable Long id) {
-        return clientService.getClientById(id);
+    public ClientDTO getClientById(@PathVariable Long clientId) {
+        return clientService.getClientById(clientId);
     }
 
     @PostMapping
@@ -41,19 +41,19 @@ public class ClientController {
         return clientService.updateClient(id, clientDTO);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{clientId}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteClient(@PathVariable Long id) {
-        clientService.deleteClientById(id);
+    public void deleteClient(@PathVariable Long clientId) {
+        clientService.deleteClientById(clientId);
     }
 
-    @GetMapping("/get/{lastName}")
+    @GetMapping("/{lastName}")
     @ResponseStatus(HttpStatus.OK)
     public List<ClientDTO> findByLastName(@PathVariable("lastName") String lastName) {
         return clientService.findByLastName(lastName);
     }
 
-    @GetMapping("/get/{firstName}/{lastName}")
+    @GetMapping("/{firstName}/{lastName}")
     @ResponseStatus(HttpStatus.OK)
     public ClientDTO findByFirstNameAndLastName(@PathVariable("firstName") String firstName, @PathVariable("lastName") String lastName) {
         return clientService.findByFirstNameAndLastName(firstName, lastName);
