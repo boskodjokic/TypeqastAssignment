@@ -25,6 +25,7 @@ public class Address {
     @OneToOne(mappedBy = "address")
     private Client client;
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
