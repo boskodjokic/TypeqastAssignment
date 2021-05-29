@@ -26,8 +26,8 @@ import static org.mockito.Mockito.*;
 class ClientServiceImplTest {
 
     private static final Long ID = 1L;
-    public static final String FIRST_NAME = "Bob";
-    public static final String LAST_NAME = "Fossil";
+    private static final String FIRST_NAME = "Bob";
+    private static final String LAST_NAME = "Fossil";
 
     ClientService clientService;
 
@@ -83,8 +83,8 @@ class ClientServiceImplTest {
         clientDTO.setFirstName(FIRST_NAME);
         Address address1 = new Address();
         address1.setNumber("56");
-        address1.setStreet("akakka");
-        address1.setCity("beog");
+        address1.setStreet("Mighty Boosh Avenue");
+        address1.setCity("Dalston");
         clientDTO.setAddress(address1);
         clientDTO.setMeter(new Meter());
 
@@ -99,6 +99,7 @@ class ClientServiceImplTest {
         ClientDTO savedDTO = clientService.createNewClient(clientDTO);
 
         assertEquals(clientDTO.getFirstName(), savedDTO.getFirstName());
+        assertEquals(clientDTO.getLastName(), savedDTO.getLastName());
 
     }
 
