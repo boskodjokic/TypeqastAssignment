@@ -33,7 +33,7 @@ class ReadingServiceImplTest {
     ReadingRepository readingRepository;
 
     @InjectMocks
-    Mapper mappper;
+    Mapper mapper;
 
     @Mock
     ClientRepository clientRepository;
@@ -41,9 +41,15 @@ class ReadingServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        readingService = new ReadingServiceImpl(mappper, readingRepository, clientRepository);
+        readingService = new ReadingServiceImpl(mapper, readingRepository, clientRepository);
     }
 
+    /**
+     * When we call clientRepository.findById() that returns our client object form helper method below.
+     * When we call readingRepository.getAllReadingsForClientId() that returns list of readings from our helper method.
+     * We are making new list of readingDTOs and we call readingService.getAllReadingsForClientId();
+     * We are asserting that we indeed have 2 items in our list, and that fields are equal to the our first object in list of readings.
+     */
     @Test
     void getAllReadingsForClientId() {
 
@@ -58,6 +64,13 @@ class ReadingServiceImplTest {
         assertEquals("2021", readingDTOs.get(0).getYear());
     }
 
+    /**
+     * When we call clientRepository.findById() that returns our client object.
+     * When we call readingRepository.getAllReadingsForClientId() that returns list of readings.
+     * We are making new list of readingDTOs and we call readingService.getAllReadingsForClientId();
+     * Also, we make new ReadingDTO object when calling readingService.getTotalOfReadingsForClientId().
+     * After that, we are setting fields for our new DTO object and asserting that fields are equal for it.
+     */
     @Test
     void getTotalOfReadingsForClientId() {
 
@@ -76,6 +89,12 @@ class ReadingServiceImplTest {
         assertEquals("2021", totalReading.getYear());
     }
 
+    /**
+     * When we call clientRepository.findById() that returns our client object form helper method below.
+     * When we call readingRepository.getAllReadingsForClientId() that returns list of readings from our helper method.
+     * We are making new list of readingDTOs and we call readingService.getAllReadingsPerClientPerYear();
+     * We are asserting that we indeed have 2 items in our list, and that fields are equal to the our first object in list of readings.
+     */
     @Test
     void getAllReadingsPerClientPerYear() {
 
@@ -90,6 +109,13 @@ class ReadingServiceImplTest {
         assertEquals("2021", readingDTOs.get(0).getYear());
     }
 
+    /**
+     * When we call clientRepository.findById() that returns our client object.
+     * When we call readingRepository.getAllReadingsForClientId() that returns list of readings.
+     * We are making new list of readingDTOs and we call readingService.getAllReadingsForClientId();
+     * Also, we make new ReadingDTO object when calling readingService.getReadingForClientIdForMonth().
+     * After that, we are setting fields for our new DTO object and asserting that fields are equal for it.
+     */
     @Test
     void getReadingForClientIdForMonth() {
 
@@ -108,6 +134,14 @@ class ReadingServiceImplTest {
         assertEquals("2021", monthReading.getYear());
     }
 
+    /**
+     * First, we are making new DTO object and setting fields for it.
+     * Also, we are creating new Reading object, and setting fields from the DTO.
+     * When we call clientRepository.findById() that returns our client object form helper method below.
+     * When we call readingRepository.getAllReadingsForClientId() that returns list of readings from our helper method.
+     * We are making new DTO when we call readingService.createNewReading();
+     * We are asserting that fields are equal to our savedDTO object.
+     */
     @Test
     void createNewReading() {
 
@@ -134,6 +168,15 @@ class ReadingServiceImplTest {
         assertEquals("2021", savedDTO.getYear());
     }
 
+    /**
+     * First, we are making new DTO object and setting fields for it.
+     * Also, we are creating new Reading object, and setting fields from the DTO.
+     * When we call clientRepository.findById() that returns our client object form helper method below.
+     * When we call readingRepository.getAllReadingsForClientId() that returns list of readings from our helper method.
+     * When we call readingRepository.getReadingId(), that returns ID of the reading object that should be updated.
+     * We are making new DTO when we call readingService.updateReading();
+     * We are asserting that fields are equal to our savedDTO object.
+     */
     @Test
     void updateReading() {
 
@@ -161,12 +204,19 @@ class ReadingServiceImplTest {
         assertEquals("2021", savedDTO.getYear());
     }
 
+    /**
+     * We are calling readingRepository.deleteById() and verifying that is called exactly one time
+     */
     @Test
     void deleteReading() {
         readingRepository.deleteById(ID);
         verify(readingRepository, times(1)).deleteById(anyLong());
     }
 
+    /**
+     * Helper method for creating new client object
+     * @return new client object for testing purposes.
+     */
     public Client getClient() {
         Client client = new Client();
         client.setId(ID);
@@ -178,6 +228,10 @@ class ReadingServiceImplTest {
         return client;
     }
 
+    /**
+     * Helper method for creating a list of readings.
+     * @return new list of reading objects for testing purposes.
+     */
     public List<Reading> getReadings() {
         List<Reading> readings = new ArrayList<>();
         Reading reading = new Reading();

@@ -47,6 +47,12 @@ class ClientServiceImplTest {
         clientService = new ClientServiceImpl(mapper, clientRepository, addressRepository);
     }
 
+    /**
+     * First, we are making 2 Client objects.
+     * When we call clientRepository.findAll() that returns our 2 DTOs as list.
+     * We are making new list of ClientDTOs and we call clientService.getAllClients();
+     * We are asserting that we indeed have 2 items in our list.
+     */
     @Test
     void getAllClients() {
 
@@ -63,6 +69,12 @@ class ClientServiceImplTest {
         assertEquals(2, clientDTOs.size());
     }
 
+    /**
+     * First, we are making one Client object.
+     * When we call clientRepository.findById() that returns our client.
+     * New ClientDTO is created when calling clientService.getClientById();
+     * We are asserting that first name and last name are the same.
+     */
     @Test
     void getClientById() {
 
@@ -76,6 +88,13 @@ class ClientServiceImplTest {
         assertEquals(LAST_NAME, clientDTO.getLastName());
     }
 
+    /**
+     * First, we are making one ClientDTO object with all necessary fields.
+     * Then, new Client object is created which will have fields from DTO object.
+     * When we call clientRepository.save() that returns our savedClient.
+     * New ClientDTO is created when calling clientService.createNewClient();
+     * We are asserting that first name and last name are the same.
+     */
     @Test
     void createNewClient() throws Exception {
 
@@ -103,6 +122,13 @@ class ClientServiceImplTest {
 
     }
 
+    /**
+     * First, we are making one ClientDTO object with all fields that should be updated.
+     * Then, new Client object is created with our helper method.
+     * When we call clientRepository.save() and clientRepository.save(), they return our savedClient.
+     * New ClientDTO is created when calling clientService.updateClient();
+     * We are asserting that first name is the same.
+     */
     @Test
     void updateClient() {
 
@@ -119,12 +145,22 @@ class ClientServiceImplTest {
         assertEquals(savedClientDTO.getFirstName(), clientDTO.getFirstName());
     }
 
+    /**
+     * We are calling clientRepository.deleteById() and verifying that is called exactly one time
+     */
     @Test
     void deleteClientById() {
         clientRepository.deleteById(ID);
         verify(clientRepository, times(1)).deleteById(anyLong());
     }
 
+    /**
+     * First, we are making one Client object with our helper method.
+     * When we call clientRepository.findByLastName() that returns our
+     * client(or list if there are several clients with same last name, but for testing purposes, we are getting back only one).
+     * New list of ClientDTOs is created when calling clientService.findByLastName();
+     * We are asserting that first name and last name are the same.
+     */
     @Test
     void findByLastName() {
 
@@ -138,6 +174,13 @@ class ClientServiceImplTest {
         assertEquals(LAST_NAME, clientDTOs.get(0).getLastName());
     }
 
+    /**
+     * First, we are making one Client object.
+     * When we call clientRepository.findByFirstNameAndLastName() that returns our
+     * client(or list if there are several clients with same first and last name, but for testing purposes, we are getting back only one).
+     * New list of ClientDTOs is created when calling clientService.findByFirstNameAndLastName();
+     * We are asserting that first name and last name are the same.
+     */
     @Test
     void findByFirstNameAndLastName() {
 
@@ -151,6 +194,10 @@ class ClientServiceImplTest {
         assertEquals(LAST_NAME, clientDTOs.get(0).getLastName());
     }
 
+    /**
+     * Helper method for creating new client object.
+     * @return new client object for testing purposes.
+     */
     public Client getClient() {
         Client client = new Client();
         client.setId(ID);
