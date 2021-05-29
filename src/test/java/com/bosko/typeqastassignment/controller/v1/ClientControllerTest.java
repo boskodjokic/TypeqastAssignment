@@ -4,6 +4,7 @@ import com.bosko.typeqastassignment.api.v1.dto.ClientDTO;
 import com.bosko.typeqastassignment.controller.RestResponseEntityExceptionHandler;
 import com.bosko.typeqastassignment.exceptions.ResourceNotFoundException;
 import com.bosko.typeqastassignment.service.ClientService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -122,7 +123,8 @@ class ClientControllerTest {
 
         mockMvc.perform(post(ClientController.BASE_URL)
                 .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().valueToTree(returnDTO).toString()))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.firstName", equalTo("Bob")));
     }
@@ -149,7 +151,8 @@ class ClientControllerTest {
 
         mockMvc.perform(put(ClientController.BASE_URL + "/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
+                .accept(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().valueToTree(returnDTO).toString()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName", equalTo("Bob")));
     }
