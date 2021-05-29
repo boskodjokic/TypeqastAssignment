@@ -1,14 +1,13 @@
 package com.bosko.typeqastassignment.service;
 
 import com.bosko.typeqastassignment.api.v1.dto.ReadingDTO;
+import com.bosko.typeqastassignment.api.v1.mapper.Mapper;
 import com.bosko.typeqastassignment.entity.Meter;
 import com.bosko.typeqastassignment.entity.Reading;
 import com.bosko.typeqastassignment.exceptions.BadRequestException;
 import com.bosko.typeqastassignment.exceptions.ResourceNotFoundException;
-import com.bosko.typeqastassignment.api.v1.mapper.Mapper;
 import com.bosko.typeqastassignment.repository.ClientRepository;
 import com.bosko.typeqastassignment.repository.ReadingRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,15 +17,17 @@ import java.util.stream.Collectors;
 @Service
 public class ReadingServiceImpl implements ReadingService {
 
-    @Autowired
-    private Mapper mapper;
+    private final Mapper mapper;
 
-    @Autowired
-    private ReadingRepository readingRepository;
+    private final ReadingRepository readingRepository;
 
-    @Autowired
-    private ClientRepository clientRepository;
+    private final ClientRepository clientRepository;
 
+    public ReadingServiceImpl(Mapper mapper, ReadingRepository readingRepository, ClientRepository clientRepository) {
+        this.mapper = mapper;
+        this.readingRepository = readingRepository;
+        this.clientRepository = clientRepository;
+    }
 
     /**
      * Method for getting all readings for a specified client id

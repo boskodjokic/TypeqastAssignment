@@ -1,15 +1,14 @@
 package com.bosko.typeqastassignment.service;
 
 import com.bosko.typeqastassignment.api.v1.dto.ClientDTO;
+import com.bosko.typeqastassignment.api.v1.mapper.Mapper;
 import com.bosko.typeqastassignment.entity.Address;
 import com.bosko.typeqastassignment.entity.Client;
 import com.bosko.typeqastassignment.entity.Meter;
 import com.bosko.typeqastassignment.exceptions.BadRequestException;
 import com.bosko.typeqastassignment.exceptions.ResourceNotFoundException;
-import com.bosko.typeqastassignment.api.v1.mapper.Mapper;
 import com.bosko.typeqastassignment.repository.AddressRepository;
 import com.bosko.typeqastassignment.repository.ClientRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,14 +18,17 @@ import java.util.stream.Collectors;
 @Service
 public class ClientServiceImpl implements ClientService {
 
-    @Autowired
-    private Mapper mapper;
+    private final Mapper mapper;
 
-    @Autowired
-    private ClientRepository clientRepository;
+    private final ClientRepository clientRepository;
 
-    @Autowired
-    private AddressRepository addressRepository;
+    private final AddressRepository addressRepository;
+
+    public ClientServiceImpl(Mapper mapper, ClientRepository clientRepository, AddressRepository addressRepository) {
+        this.mapper = mapper;
+        this.clientRepository = clientRepository;
+        this.addressRepository = addressRepository;
+    }
 
     /**
      * Method for getting the list of clients and returning them to the user.
@@ -133,12 +135,13 @@ public class ClientServiceImpl implements ClientService {
 
     /**
      * Method for deleting client.
+     *
      * @param id clientId is passed and repository searches the database and deletes client with corresponding id.
      */
     @Override
     public void deleteClientById(Long id) {
         Optional<Client> client = clientRepository.findById(id);
-        if(!client.isPresent()) {
+        if (!client.isPresent()) {
             throw new ResourceNotFoundException();
         }
         clientRepository.deleteById(id);
@@ -169,19 +172,19 @@ public class ClientServiceImpl implements ClientService {
      * Method for searching client with both first name and last name.
      *
      * @param firstName first name of the searched client
-     * @param lastName last name of the searched client
+     * @param lastName  last name of the searched client
      * @return list of client is returned(there is a possibility that there are more than one client with same first and last name).
      * If no clients are present in the list, error is shown to user.
      */
     @Override
     public List<ClientDTO> findByFirstNameAndLastName(String firstName, String lastName) {
-        List<Client> clientList = clientRepository.findByFirstNameAndLastName(firstName,lastName);
+        List<Client> clientList = clientRepository.findByFirstNameAndLastName(firstName, lastName);
         if (clientList.isEmpty()) {
             throw new ResourceNotFoundException();
         }
-            return clientRepository.findByFirstNameAndLastName(firstName, lastName)
-                    .stream()
-                    .map(mapper::transformClientToDTO)
-                    .collect(Collectors.toList());
+        return clientRepository.findByFirstNameAndLastName(firstName, lastName)
+                .stream()
+                .map(mapper::transformClientToDTO)
+                .collect(Collectors.toList());
     }
 }
