@@ -1,6 +1,7 @@
 package com.bosko.typeqastassignment.controller.v1;
 
 import com.bosko.typeqastassignment.api.v1.dto.ReadingDTO;
+import com.bosko.typeqastassignment.exceptions.ResourceNotFoundException;
 import com.bosko.typeqastassignment.service.ReadingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,12 @@ public class ReadingController {
 
     @Autowired
     private ReadingService readingService;
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public void incompleteData() {
+        throw new ResourceNotFoundException();
+    }
 
     @GetMapping("{clientId}")
     @ResponseStatus(HttpStatus.OK)
