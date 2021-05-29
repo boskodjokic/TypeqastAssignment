@@ -138,7 +138,7 @@ public class ReadingServiceImpl implements ReadingService {
                 throw new BadRequestException();
             }
         }
-        readingDTO.setMeter(clientRepository.getById(clientId).getMeter());
+        readingDTO.setMeter(clientRepository.findById(clientId).get().getMeter());
 
         Reading reading = mapper.transformReadingDTOToEntity(readingDTO);
 
@@ -164,7 +164,7 @@ public class ReadingServiceImpl implements ReadingService {
     public ReadingDTO updateReading(Long clientId, ReadingDTO readingDTO) {
 
         checkIfClientExists(clientId);
-        Meter meter = clientRepository.getById(clientId).getMeter();
+        Meter meter = clientRepository.findById(clientId).get().getMeter();
         Long readingId = readingRepository.getReadingId(Integer.parseInt(readingDTO.getYear()), readingDTO.getMonth(), meter.getId());
         if (readingId == null) {
             throw new ResourceNotFoundException();
