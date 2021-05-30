@@ -1,26 +1,38 @@
 package com.bosko.typeqastassignment.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Objects;
 
+@ApiModel(description = "Client's address")
 @Data
 @Entity
 public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(name = "Address ID", value = "1")
+    @JsonIgnore
     private Long id;
 
+    @ApiModelProperty(name = "Street", value = "Mighty Boosh Avenue")
     @Column(nullable = false, length = 100)
     private String street;
+
+    @ApiModelProperty(name = "Street Number", value = "56")
     @Column(nullable = false, length = 100)
     private String number;
+
+    @ApiModelProperty(name = "City", value = "Dalston")
     @Column(nullable = false, length = 100)
     private String city;
 
+    @ApiModelProperty(hidden = true)
     @JsonBackReference(value = "client")
     @OneToOne(mappedBy = "address")
     private Client client;
