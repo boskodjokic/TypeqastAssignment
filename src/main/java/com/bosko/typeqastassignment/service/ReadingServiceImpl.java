@@ -4,7 +4,7 @@ import com.bosko.typeqastassignment.api.v1.dto.ReadingDTO;
 import com.bosko.typeqastassignment.api.v1.mapper.Mapper;
 import com.bosko.typeqastassignment.entity.Meter;
 import com.bosko.typeqastassignment.entity.Reading;
-import com.bosko.typeqastassignment.exceptions.BadRequestException;
+import com.bosko.typeqastassignment.exceptions.ResourceAlreadyExistsException;
 import com.bosko.typeqastassignment.exceptions.ResourceNotFoundException;
 import com.bosko.typeqastassignment.repository.ClientRepository;
 import com.bosko.typeqastassignment.repository.ReadingRepository;
@@ -118,12 +118,7 @@ public class ReadingServiceImpl implements ReadingService {
     /**
      * Method for creating a new reading.
      * @param clientId client id is passed for checking is the client already in a database, if not, error is shown to the user.
-     * @param readingDTO is passed through postman in a format below:
-     *    {
-     *         "value": number,
-     *         "month": "month",
-     *         "year": "year"
-     *     }
+     * @param readingDTO with all necessary fields is passed.
      * First, we are checking is there already that month/year combination in the database. If yes, error is shown to the user and entry is not saved.
      * @return ReadingDTO with inserted values is shown back to the user if everything is OK.
      */
@@ -135,7 +130,7 @@ public class ReadingServiceImpl implements ReadingService {
         for (ReadingDTO dto : readings) {
             if (readingDTO.getMonth().equals(dto.getMonth()) &&
                     readingDTO.getYear().equals(dto.getYear())) {
-                throw new BadRequestException();
+                throw new ResourceAlreadyExistsException();
             }
         }
         readingDTO.setMeter(clientRepository.findById(clientId).get().getMeter());
@@ -149,12 +144,7 @@ public class ReadingServiceImpl implements ReadingService {
     /**
      * Method for updating a reading.
      * @param clientId is passed for checking is the client already in a database, if not, error is shown to the user.
-     * @param readingDTO is passed through postman in a format below:
-     *           {
-     *                "value": number,
-     *                "month": "month",
-     *                "year": "year"
-     *            }
+     * @param readingDTO with all necessary fields is passed.
      * First we are checking is there reading with specified year/month.
      * Only if they are present, value can be updated.
      * If the year and month provided are not in the database, error is show to the user.
@@ -169,16 +159,19 @@ public class ReadingServiceImpl implements ReadingService {
         if (readingId == null) {
             throw new ResourceNotFoundException();
         }
-        List<ReadingDTO> readings = getAllReadingsForClientId(clientId);
-        for (int i = 0; i < readings.size(); i++) {
 
-            if (!readingDTO.getMonth().equals(readings.get(clientId.intValue() - 1).getMonth()) &&
-                    !readingDTO.getYear().equals(readings.get(clientId.intValue() - 1).getYear())) {
-                throw new BadRequestException();
-            } else {
+        List<ReadingDTO> readings = getAllReadingsForClientId(clientId);
+
+        for (ReadingDTO dto : readings) {
+            if (!readingDTO.getMonth().equals(dto.getMonth()) &&
+                    !readingDTO.getYear().equals(dto.getYear())) {
+                throw new ResourceAlreadyExistsException();
+            }
+            else {
                 readingDTO.setId(readingId);
             }
         }
+
         readingDTO.setMeter(meter);
 
         Reading reading = mapper.transformReadingDTOToEntity(readingDTO);
