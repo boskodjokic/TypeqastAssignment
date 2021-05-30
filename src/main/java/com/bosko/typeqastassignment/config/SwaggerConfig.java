@@ -37,7 +37,7 @@ public class SwaggerConfig {
                 "Terms of Service",
                 contact,
                 "Apache Licence Version 2.0",
-                "https://www.apache.org/licences/LICENCE-2.0",
+                "https://www.apache.org/licenses/LICENSE-2.0.txt",
                 new ArrayList<>()
         );
     }
