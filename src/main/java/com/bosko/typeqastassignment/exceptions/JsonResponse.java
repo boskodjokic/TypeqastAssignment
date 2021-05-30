@@ -5,9 +5,9 @@ import lombok.Data;
 @Data
 public class JsonResponse {
 
-    private String error;
+    private String message;
 
-    public JsonResponse(String error) {
-        this.error = error;
+    public JsonResponse(String message) {
+        this.message = message;
     }
 }
