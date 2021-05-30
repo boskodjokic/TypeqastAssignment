@@ -5,7 +5,8 @@ import com.bosko.typeqastassignment.api.v1.mapper.Mapper;
 import com.bosko.typeqastassignment.entity.Address;
 import com.bosko.typeqastassignment.entity.Client;
 import com.bosko.typeqastassignment.entity.Meter;
-import com.bosko.typeqastassignment.exceptions.BadRequestException;
+import com.bosko.typeqastassignment.exceptions.IncorrectDataException;
+import com.bosko.typeqastassignment.exceptions.ResourceAlreadyExistsException;
 import com.bosko.typeqastassignment.exceptions.ResourceNotFoundException;
 import com.bosko.typeqastassignment.repository.AddressRepository;
 import com.bosko.typeqastassignment.repository.ClientRepository;
@@ -63,27 +64,19 @@ public class ClientServiceImpl implements ClientService {
      * Then, we are checking if the address is already in the database. If it is, error is displayed to user, because we can't have 2 same addresses in the database.
      * After all checks are passed, new meter is assigned to new user with empty readings.
      * ClientDTO is transformed to entity and saved to database, and that entity in database is transformed back to DTO and displayed to user with all necessary data.
-     *
-     * @param clientDTO in Postman, data should be posted like below:
-     *                  {
-     *                  "firstName": "name",
-     *                  "lastName": "surname",
-     *                  "address": {
-     *                  "street": "street",
-     *                  "number": "number",
-     *                  "city": "city"
-     *                  }
-     *                  }
-     *                  ClientId and AddressId are omitted because they are automatically generated.
+     * @param clientDTO with all necessary fields is passed.
      * @return new client is displayed to user and it is saved to the database with meter set for the client and without any readings
      */
     @Override
     public ClientDTO createNewClient(ClientDTO clientDTO) {
+        if(clientDTO.getId() != null) {
+            throw new ResourceAlreadyExistsException();
+        }
         addressNotNullCheck(clientDTO);
         List<Address> addresses = addressRepository.findAll();
         for (Address address : addresses) {
             if (clientDTO.getAddress().equals(address)) {
-                throw new BadRequestException();
+                throw new IncorrectDataException();
             }
         }
         clientDTO.setMeter(new Meter());
@@ -111,12 +104,8 @@ public class ClientServiceImpl implements ClientService {
      * Meter is tied to address, so if the client is moving to another address, he should be given new meter (at least, that is how it works in real life).
      *
      * @param id        clientId is a given parameter
-     * @param clientDTO data should be given like below:
-     *                  {
-     *                  "firstName": "name",
-     *                  "lastName": "surname"
-     *                  }
-     *                  It also works if the same data is given like in method for creating new client (with address), but only first name and last name are updated.
+     * @param clientDTO with all necessary fields is passed.
+     * It also works if the same data is given like in method for creating new client (with address), but only first name and last name are updated.
      * @return client with updated fields
      */
     @Override
