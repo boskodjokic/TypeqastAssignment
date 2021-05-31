@@ -1,7 +1,6 @@
 package com.bosko.typeqastassignment.api.v1.dto;
 
-import com.bosko.typeqastassignment.entity.Address;
-import com.bosko.typeqastassignment.entity.Meter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -24,9 +23,11 @@ public class ClientDTO {
     private String lastName;
 
     @ApiModelProperty(notes = "Client's address", name = "Address")
-    private Address address;
+    @JsonProperty("address")
+    private AddressDTO addressDTO;
 
     @ApiModelProperty(notes = "Client's meter", name = "Meter")
-    private Meter meter;
+    @JsonProperty("meter")
+    private MeterDTO meterDTO;
 
 }
