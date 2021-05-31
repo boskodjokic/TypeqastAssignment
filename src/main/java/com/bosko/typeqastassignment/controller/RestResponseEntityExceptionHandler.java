@@ -1,9 +1,6 @@
 package com.bosko.typeqastassignment.controller;
 
-import com.bosko.typeqastassignment.exceptions.IncorrectDataException;
-import com.bosko.typeqastassignment.exceptions.ResourceAlreadyExistsException;
-import com.bosko.typeqastassignment.exceptions.JsonResponse;
-import com.bosko.typeqastassignment.exceptions.ResourceNotFoundException;
+import com.bosko.typeqastassignment.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -31,9 +28,16 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     @ExceptionHandler({IncorrectDataException.class})
     @ResponseBody
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public JsonResponse handleIncorrectDataExceptionException() {
         return new JsonResponse("Data provided is not in the right format. Please check the data entered and try again.");
+    }
+
+    @ExceptionHandler({AddressAlreadyExistsException.class})
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public JsonResponse handleAddressAlreadyExistsException() {
+        return new JsonResponse("Meter is already installed on specified address. Please check the data entered and try again.");
     }
 
 }
