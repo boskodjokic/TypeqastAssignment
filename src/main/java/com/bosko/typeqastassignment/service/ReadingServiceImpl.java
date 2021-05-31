@@ -32,6 +32,7 @@ public class ReadingServiceImpl implements ReadingService {
     /**
      * Method for getting all readings for a specified client id
      * First, we check is the client present in the database. If not, error is shown to user.
+     *
      * @param clientId is passed for checking
      * @return list of readings is returned from the database to user.
      */
@@ -42,9 +43,10 @@ public class ReadingServiceImpl implements ReadingService {
     }
 
     /**
-     *Method for retrieving total value of readings for client per specified year.
+     * Method for retrieving total value of readings for client per specified year.
+     *
      * @param clientId is passed for checking is the client present in the database, if not, error is shown to user.
-     * @param year is also passed as a parameter for which we calculate total value of readings.
+     * @param year     is also passed as a parameter for which we calculate total value of readings.
      * @return ReadingDTO is returned to user.
      */
     @Override
@@ -61,7 +63,7 @@ public class ReadingServiceImpl implements ReadingService {
         totalReadings.setValue(value);
         totalReadings.setMonth("All months");
         totalReadings.setYear(String.valueOf(year));
-        totalReadings.setMeter(totalReadings.getMeter());
+        totalReadings.setMeterDTO(totalReadings.getMeterDTO());
 
         return totalReadings;
     }
@@ -69,8 +71,9 @@ public class ReadingServiceImpl implements ReadingService {
     /**
      * Method for getting a list of readings for a client id for whole year.
      * We are checking all the readings for a clientId and checking is it for a specified year. If yes, we are adding those readings to the list.
+     *
      * @param clientId is passed for checking is the client present in the database, if not, error is shown to user.
-     * @param year is also passed as a parameter for which we retrieve the readings from a database.
+     * @param year     is also passed as a parameter for which we retrieve the readings from a database.
      * @return ReadingDTO list is returned to user.
      */
     @Override
@@ -93,9 +96,10 @@ public class ReadingServiceImpl implements ReadingService {
      * We are checking is there a reading for a specified user in the database for month and year provided.
      * If yes, we are taking that reading to show it to the user together with month and year.
      * If they are not, error is shown to the user that specified resource is not available.
+     *
      * @param clientId is passed for checking is the client present in the database, if not, error is shown to user.
-     * @param month is passed as a parameter for checking is the month in the database.
-     * @param year is passed as a parameter for checking is the year in the database.
+     * @param month    is passed as a parameter for checking is the month in the database.
+     * @param year     is passed as a parameter for checking is the year in the database.
      * @return ReadingDTO object is returned to the user.
      */
     @Override
@@ -117,9 +121,10 @@ public class ReadingServiceImpl implements ReadingService {
 
     /**
      * Method for creating a new reading.
-     * @param clientId client id is passed for checking is the client already in a database, if not, error is shown to the user.
+     *
+     * @param clientId   client id is passed for checking is the client already in a database, if not, error is shown to the user.
      * @param readingDTO with all necessary fields is passed.
-     * First, we are checking is there already that month/year combination in the database. If yes, error is shown to the user and entry is not saved.
+     *                   First, we are checking is there already that month/year combination in the database. If yes, error is shown to the user and entry is not saved.
      * @return ReadingDTO with inserted values is shown back to the user if everything is OK.
      */
     @Override
@@ -133,7 +138,7 @@ public class ReadingServiceImpl implements ReadingService {
                 throw new ResourceAlreadyExistsException();
             }
         }
-        readingDTO.setMeter(clientRepository.findById(clientId).get().getMeter());
+        readingDTO.setMeterDTO(mapper.transformMeterToDTO(clientRepository.findById(clientId).get().getMeter()));
 
         Reading reading = mapper.transformReadingDTOToEntity(readingDTO);
 
@@ -143,11 +148,12 @@ public class ReadingServiceImpl implements ReadingService {
 
     /**
      * Method for updating a reading.
-     * @param clientId is passed for checking is the client already in a database, if not, error is shown to the user.
+     *
+     * @param clientId   is passed for checking is the client already in a database, if not, error is shown to the user.
      * @param readingDTO with all necessary fields is passed.
-     * First we are checking is there reading with specified year/month.
-     * Only if they are present, value can be updated.
-     * If the year and month provided are not in the database, error is show to the user.
+     *                   First we are checking is there reading with specified year/month.
+     *                   Only if they are present, value can be updated.
+     *                   If the year and month provided are not in the database, error is show to the user.
      * @return ReadingDTO with inserted values is shown back to the user if everything is OK.
      */
     @Override
@@ -161,18 +167,23 @@ public class ReadingServiceImpl implements ReadingService {
         }
 
         List<ReadingDTO> readings = getAllReadingsForClientId(clientId);
+        List<Reading> oldReadings = new ArrayList<>();
+
+        for (ReadingDTO value : readings) {
+            oldReadings.add(mapper.transformReadingDTOToEntity(value));
+        }
+
 
         for (ReadingDTO dto : readings) {
             if (!readingDTO.getMonth().equals(dto.getMonth()) &&
                     !readingDTO.getYear().equals(dto.getYear())) {
                 throw new ResourceAlreadyExistsException();
-            }
-            else {
+            } else {
                 readingDTO.setId(readingId);
             }
         }
 
-        readingDTO.setMeter(meter);
+        readingDTO.setMeterDTO(mapper.transformMeterToDTO(meter));
 
         Reading reading = mapper.transformReadingDTOToEntity(readingDTO);
 
@@ -182,11 +193,12 @@ public class ReadingServiceImpl implements ReadingService {
 
     /**
      * Method for deleting a reading from a database.
+     *
      * @param clientId is passed for checking is the client already in a database, if not, error is shown to the user.
-     * @param month for which we are checking is in the database.
-     * @param year for which we are checking is in the database.
-     * We are checking is the reading id in the database for specified parameters. if not, error is shown to the user.
-     * If everything is OK, reading is deleted from a database.
+     * @param month    for which we are checking is in the database.
+     * @param year     for which we are checking is in the database.
+     *                 We are checking is the reading id in the database for specified parameters. if not, error is shown to the user.
+     *                 If everything is OK, reading is deleted from a database.
      */
     @Override
     public void deleteReading(Long clientId, String month, int year) {
@@ -202,6 +214,7 @@ public class ReadingServiceImpl implements ReadingService {
 
     /**
      * Method for checking is the user in the database.
+     *
      * @param clientId is passed for checking is the client already in a database, if not, error is shown to the user.
      */
     public void checkIfClientExists(Long clientId) {

@@ -5,7 +5,7 @@ import com.bosko.typeqastassignment.api.v1.mapper.Mapper;
 import com.bosko.typeqastassignment.entity.Address;
 import com.bosko.typeqastassignment.entity.Client;
 import com.bosko.typeqastassignment.entity.Meter;
-import com.bosko.typeqastassignment.exceptions.IncorrectDataException;
+import com.bosko.typeqastassignment.exceptions.AddressAlreadyExistsException;
 import com.bosko.typeqastassignment.exceptions.ResourceAlreadyExistsException;
 import com.bosko.typeqastassignment.exceptions.ResourceNotFoundException;
 import com.bosko.typeqastassignment.repository.AddressRepository;
@@ -75,11 +75,11 @@ public class ClientServiceImpl implements ClientService {
         addressNotNullCheck(clientDTO);
         List<Address> addresses = addressRepository.findAll();
         for (Address address : addresses) {
-            if (clientDTO.getAddress().equals(address)) {
-                throw new IncorrectDataException();
+            if (mapper.transformAddressDTOToEntity(clientDTO.getAddressDTO()).equals(address)) {
+                throw new AddressAlreadyExistsException();
             }
         }
-        clientDTO.setMeter(new Meter());
+        clientDTO.setMeterDTO(mapper.transformMeterToDTO(new Meter()));
 
         Client savedClient = clientRepository.save(mapper.transformClientDTOToEntity(clientDTO));
 
@@ -92,7 +92,7 @@ public class ClientServiceImpl implements ClientService {
      * @param clientDTO address values are taken from clientDTO
      */
     public void addressNotNullCheck(ClientDTO clientDTO) {
-        if (clientDTO.getAddress().getCity() == null || clientDTO.getAddress().getStreet() == null || clientDTO.getAddress().getNumber() == null) {
+        if (clientDTO.getAddressDTO().getCity() == null || clientDTO.getAddressDTO().getStreet() == null || clientDTO.getAddressDTO().getNumber() == null) {
             throw new ResourceNotFoundException();
         }
     }
