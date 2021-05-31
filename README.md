@@ -32,7 +32,10 @@ For Swagger, navigate to http://localhost:8080/swagger-ui/#
 
 Tests can be run either from IDE or from terminal.
 For running tests from terminal, navigate to the project folder and run:
-$mvn test
+
+~~~
+mvn test
+~~~
 
 ### Running app inside Docker container
 
