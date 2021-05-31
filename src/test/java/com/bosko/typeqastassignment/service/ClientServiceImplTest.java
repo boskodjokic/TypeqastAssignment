@@ -1,10 +1,10 @@
 package com.bosko.typeqastassignment.service;
 
 import com.bosko.typeqastassignment.api.v1.dto.ClientDTO;
+import com.bosko.typeqastassignment.api.v1.dto.MeterDTO;
 import com.bosko.typeqastassignment.api.v1.mapper.Mapper;
 import com.bosko.typeqastassignment.entity.Address;
 import com.bosko.typeqastassignment.entity.Client;
-import com.bosko.typeqastassignment.entity.Meter;
 import com.bosko.typeqastassignment.repository.AddressRepository;
 import com.bosko.typeqastassignment.repository.ClientRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -104,8 +104,8 @@ class ClientServiceImplTest {
         address1.setNumber("56");
         address1.setStreet("Mighty Boosh Avenue");
         address1.setCity("Dalston");
-        clientDTO.setAddress(address1);
-        clientDTO.setMeter(new Meter());
+        clientDTO.setAddressDTO(mapper.transformAddressToDTO(address1));
+        clientDTO.setMeterDTO(new MeterDTO());
 
         Client savedClient = new Client();
 

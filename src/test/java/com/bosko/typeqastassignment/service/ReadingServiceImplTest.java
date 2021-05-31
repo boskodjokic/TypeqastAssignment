@@ -158,6 +158,7 @@ class ReadingServiceImplTest {
         savedReading.setValue(readingDTO.getValue());
         savedReading.setMonth(readingDTO.getMonth());
         savedReading.setYear(Integer.parseInt(readingDTO.getYear()));
+        savedReading.setMeter(new Meter());
 
         when(readingRepository.save(any(Reading.class))).thenReturn(savedReading);
 
@@ -194,6 +195,7 @@ class ReadingServiceImplTest {
         savedReading.setValue(readingDTO.getValue());
         savedReading.setMonth(readingDTO.getMonth());
         savedReading.setYear(Integer.parseInt(readingDTO.getYear()));
+        savedReading.setMeter(new Meter());
 
         when(readingRepository.save(any(Reading.class))).thenReturn(savedReading);
 
@@ -239,12 +241,16 @@ class ReadingServiceImplTest {
         reading.setValue(15);
         reading.setMonth("May");
         reading.setYear(2021);
+        Meter meter = new Meter();
+        meter.setId(ID);
+        reading.setMeter(meter);
 
         Reading reading2 = new Reading();
         reading2.setId(2L);
         reading2.setValue(25);
         reading2.setMonth("June");
         reading2.setYear(2021);
+        reading2.setMeter(meter);
 
         readings.add(reading);
         readings.add(reading2);
