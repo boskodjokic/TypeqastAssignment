@@ -12,11 +12,15 @@ Also, CircleCI config file is added so after every commit, tests are run and che
 
 Navigate to the folder of the project and first run in terminal:
 
-$mvn clean install
+~~~
+mvn clean install
+~~~
 
 After that run the app with command:
 
-$mvn spring-boot:run
+~~~
+mvn spring-boot:run
+~~~
 
 Application is running on http://localhost:8080/
 To connect to database go to http://localhost:8080/h2-console
@@ -33,13 +37,22 @@ $mvn test
 ### Running app inside Docker container
 
 Navigate to the folder of the project and first run in terminal:
-$mvn clean install
+
+~~~
+mvn clean install
+~~~
 
 After that, run:
-$docker build -f Dockerfile -t docker-app .
+
+~~~
+docker build -f Dockerfile -t docker-app .
+~~~
 
 After the image is created, run:
-$docker run -p 8080:8080 docker-app
+
+~~~
+docker run -p 8080:8080 docker-app
+~~~
 
 Application is running on http://localhost:8080/
 
