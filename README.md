@@ -8,6 +8,12 @@ H2 (in-memory) database is used to add data persistence.
 Data is loaded at startup from bootstrap loader class.
 Also, CircleCI config file is added so after every commit, tests are run and checked.
 
+API calls can be tested with Postman or via Swagger.
+Address for client controller is http://localhost:8080/api/v1/clients
+Address for reading controller is http://localhost:8080/api/v1/readings
+
+Detailed methods and requirements are in Swagger documentation.
+
 ### Building the application
 
 Navigate to the folder of the project and first run in terminal:
