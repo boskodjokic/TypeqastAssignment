@@ -63,4 +63,4 @@ To connect to database go to http://localhost:8080/h2-console and change JDBC UR
 For Swagger, navigate to http://localhost:8080/swagger-ui/#
 
 ### Notes
-If you don't have maven installed on the machine, maven wrapper is integrated in the project, so it can be run with $mvnw instead of $mvn.
+If you don't have maven installed on the machine, maven wrapper is integrated in the project, so it can be run with <mark>mvnw</mark> instead of <mark>mvn</mark>.
